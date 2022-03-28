@@ -72,7 +72,6 @@ body {
     inset -2px -2px 2px lightgrey;
 }
 
-.numberhovered,
 .special-key:hover,
 .number-key:hover {
   box-shadow: inset 1px 1px 3px grey;
@@ -87,8 +86,17 @@ body {
     inset -2px -2px 2px lightgrey;
 }
 
-.functionhovered,
 .function-key:hover {
   box-shadow: inset 2px 0px 2px grey, inset 4px 4px 4px white,
     inset 2px 2px 2px lightgrey;
+}
+
+#footer {
+  font-size: 15px;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
