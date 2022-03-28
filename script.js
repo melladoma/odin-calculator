@@ -1,19 +1,19 @@
 //CALCULATOR FUNCTIONS
 let b;
 function add(a, b) {
-    return Math.round((a + b) * 1000000) / 1000000; //rounded to 6 decimals
+    return Math.round((a + b) * 1000000000) / 1000000000; //rounded to 9 decimals
 }
 
 function subtract(a, b) {
-    return Math.round((a - b) * 1000000) / 1000000;
+    return Math.round((a - b) * 1000000000) / 1000000000;
 }
 
 function multiply(a, b) {
-    return Math.round((a * b) * 1000000) / 1000000;
+    return Math.round((a * b) * 1000000000) / 1000000000;
 }
 
 function divide(a, b) {
-    return b === 0 ? "REALLY?" : Math.round((a / b) * 1000000) / 1000000;
+    return b === 0 ? "REALLY?" : Math.round((a / b) * 1000000000) / 1000000000;
 
 }
 
@@ -29,15 +29,18 @@ function operate(a, operator, b) {
     }
 }
 
-//KEYS TO DISPLAY FUNCTIONS
+//CLICKED KEYS TO DISPLAY FUNCTIONS
 let screenDisplay = document.getElementById('screen-display');
 let screenDisplayText = "";
 let screenDisplayValue;
+let floatActive = false;
+let dotKey = document.getElementById('keydot')
 
 let numberKeys = document.querySelectorAll('.number-key');
 numberKeys.forEach(key => {
-    key.addEventListener('click', getKeyDisplay)
+    key.addEventListener('click', getKeyDisplay);
 })
+
 
 function getKeyDisplay(ev) { //type string
     if (screenDisplayText.length < 11) {
@@ -46,8 +49,7 @@ function getKeyDisplay(ev) { //type string
         screenDisplay.textContent = screenDisplayValue; //display number (zero disappears)
     }
 }
-
-
+//AC KEY
 let clearAllKey = document.getElementById('allclear-key');
 clearAllKey.addEventListener('click', clearAll);
 
@@ -57,6 +59,7 @@ function clearAll() {
     screenDisplay.textContent = screenDisplayValue;
 }
 
+//DEL KEY
 let deleteKey = document.getElementById('delete-key');
 deleteKey.addEventListener('click', deleteLast);
 
@@ -141,3 +144,41 @@ function finishOperation() {
 let equalsKey = document.getElementById('equals-key');
 equalsKey.addEventListener('click', finishOperation);
 
+//KEYBOARD SUPPORT 
+window.addEventListener('keydown', getKeyPressed)
+
+function getKeyPressed(ev) {
+    if (!isNaN(parseFloat(ev.key)) || ev.key == ".") {// numerical values + dot
+        if (screenDisplayText.length < 11) {
+            screenDisplayText += ev.key; //string concatenation
+            screenDisplayValue = parseFloat(screenDisplayText); //conversion to floating number
+            screenDisplay.textContent = screenDisplayValue; //display number (zero disappears)
+        }
+    } else if (ev.key == "/" || ev.key == "*" || ev.key == "+" || ev.key == "-") {
+        if ((screenDisplayValue === 0 || screenDisplayValue == null) && screenDisplayText === "") {
+            /* if nothing has been inputed before operator clicking
+               screen value is taken as operand */
+            screenDisplayText = screenDisplay.textContent;
+            screenDisplayValue = parseFloat(screenDisplayText);
+            inputA = screenDisplayValue;
+        } else if (inputA != null) {
+            /*if something has already be inputed as first operand (ex : 4 + 3 +)
+             do the calc and display result (4 + 3), then stores result (7) in inputA
+             to enable other operation forward */
+            finishOperation();
+            inputA = result;
+        } else {
+            /* nominal mode, some numbers have been clicked by the user, 
+             the number in its state upon clicking is stored in inputA */
+            inputA = screenDisplayValue;
+        }
+        //clears display for next input
+        screenDisplayText = "";
+        screenDisplayValue = 0;
+        operatorChoice = ev.key;
+    } else if (ev.key == "Enter" || ev.key == "=") {
+        finishOperation();
+    } else if (ev.key == "Backspace") {
+        deleteLast();
+    }
+}

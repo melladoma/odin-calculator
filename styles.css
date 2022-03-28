@@ -53,7 +53,8 @@ body {
 }
 
 .number-key,
-.function-key {
+.function-key,
+.special-key {
   height: 50px;
   width: 50px;
   display: flex;
@@ -62,7 +63,8 @@ body {
   border: 1px solid grey;
 }
 
-.number-key {
+.number-key,
+.special-key {
   background-color: rgb(248, 223, 227);
   border-radius: 5px;
   box-shadow: 2px 2px 2px grey, inset 4px 0px 4px white, inset 4px 4px 4px white,
@@ -70,6 +72,7 @@ body {
 }
 
 .numberhovered,
+.special-key:hover,
 .number-key:hover {
   box-shadow: inset 1px 1px 3px grey;
 }
