@@ -41,12 +41,19 @@ numberKeys.forEach(key => {
     key.addEventListener('click', getKeyDisplay);
 })
 
-
 function getKeyDisplay(ev) { //type string
     if (screenDisplayText.length < 11) {
-        screenDisplayText += ev.target.textContent; //string concatenation
-        screenDisplayValue = parseFloat(screenDisplayText); //conversion to floating number
-        screenDisplay.textContent = screenDisplayValue; //display number (zero disappears)
+        if (screenDisplayText.includes(".")) {
+            dotKey.removeEventListener('click', getKeyDisplay);
+            screenDisplayText += ev.target.textContent; //string concatenation
+            screenDisplayValue = parseFloat(screenDisplayText); //conversion to floating number
+            screenDisplay.textContent = screenDisplayValue; //display number (zero disappears)
+        } else {
+            dotKey.addEventListener('click', getKeyDisplay);
+            screenDisplayText += ev.target.textContent; //string concatenation
+            screenDisplayValue = parseFloat(screenDisplayText); //conversion to floating number
+            screenDisplay.textContent = screenDisplayValue; //display number (zero disappears)
+        }
     }
 }
 //AC KEY
@@ -148,12 +155,23 @@ equalsKey.addEventListener('click', finishOperation);
 window.addEventListener('keydown', getKeyPressed)
 
 function getKeyPressed(ev) {
-    if (!isNaN(parseFloat(ev.key)) || ev.key == ".") {// numerical values + dot
+    if (!isNaN(parseFloat(ev.key))) {// numerical values + dot
         if (screenDisplayText.length < 11) {
             screenDisplayText += ev.key; //string concatenation
             screenDisplayValue = parseFloat(screenDisplayText); //conversion to floating number
             screenDisplay.textContent = screenDisplayValue; //display number (zero disappears)
         }
+    } else if (ev.key == ".") {
+        if (screenDisplayText.length < 11 && screenDisplayText.includes(".")) {
+            screenDisplayText += "";
+            screenDisplayValue = parseFloat(screenDisplayText);
+            screenDisplay.textContent = screenDisplayValue;
+        } else {
+            screenDisplayText += ev.key;
+            screenDisplayValue = parseFloat(screenDisplayText);
+            screenDisplay.textContent = screenDisplayValue;
+        }
+
     } else if (ev.key == "/" || ev.key == "*" || ev.key == "+" || ev.key == "-") {
         if ((screenDisplayValue === 0 || screenDisplayValue == null) && screenDisplayText === "") {
             /* if nothing has been inputed before operator clicking

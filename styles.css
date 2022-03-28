@@ -6,6 +6,7 @@ body {
 }
 
 .case {
+  margin: 100px auto;
   background-color: pink;
   border: 1px solid grey;
   width: fit-content;
